@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ── SEO Primary ──────────────────────────────────────────────────── -->
+  <title>Precio del Gas LP en Querétaro 2026 | Por Municipio</title>
+  <meta name="description" content="Consulta el precio máximo oficial del gas LP en Querétaro esta semana, por municipio con IVA incluido. Mapa interactivo y buscador. Fuente: CNE.">
+  <link rel="canonical" href="https://preciodelgas.com/queretaro">
+
+  <!-- ── Open Graph / Social ──────────────────────────────────────────── -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://preciodelgas.com/queretaro">
+  <meta property="og:title" content="Precio del Gas LP en Querétaro 2026 | Por Municipio">
+  <meta property="og:description" content="Mapa interactivo con los precios máximos oficiales del gas LP en Querétaro por municipio. Actualizado cada semana.">
+  <meta property="og:locale" content="es_MX">
+  <meta property="og:image" content="https://preciodelgas.com/banner-gasometric.webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
+  <!-- ── Twitter Card ─────────────────────────────────────────────────── -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Precio del Gas LP en Querétaro 2026">
+  <meta name="twitter:description" content="Precio máximo oficial del gas LP en Querétaro por municipio. Datos de la CNE actualizados cada semana.">
+  <meta name="twitter:image" content="https://preciodelgas.com/banner-gasometric.webp">
+
+  <!-- ── Structured Data ──────────────────────────────────────────────── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Precio del Gas LP en Querétaro 2026",
+    "url": "https://preciodelgas.com/queretaro",
+    "description": "Precios máximos del gas LP por municipio en Querétaro, con datos oficiales actualizados semanalmente por la CNE.",
+    "inLanguage": "es-MX",
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Precio del Gas LP en México", "item": "https://preciodelgas.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Querétaro", "item": "https://preciodelgas.com/queretaro" }
+      ]
+    }
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "¿Cuánto cuesta el gas LP en Querétaro esta semana?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "El precio máximo oficial del gas LP en Querétaro para la semana actual se consulta en esta página. Los precios son regulados por la Comisión Nacional de Energía (CNE) y se actualizan cada semana con IVA incluido."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Es el mismo precio en todos los municipios de Querétaro?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No necesariamente. El precio puede variar entre municipios de Querétaro según la zona de distribución y los costos logísticos. Usa el buscador o el mapa para ver el precio exacto de tu municipio."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Dónde reportar si el gasero cobra más del precio oficial en Querétaro?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Puedes reportarlo a PROFECO al teléfono 800-468-8722 (INFOTEL) o en profeco.gob.mx. El precio máximo oficial de tu municipio lo ves en esta página."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    #estado-header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1100;
+      background: #1a3a5c; color: #fff;
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 16px; font-size: 13px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    }
+    #estado-header a {
+      color: rgba(255,255,255,0.7); text-decoration: none;
+      font-size: 12px; display: flex; align-items: center; gap: 4px; flex-shrink: 0;
+    }
+    #estado-header a:hover { color: #fff; }
+    #estado-header h1 {
+      font-size: 14px; font-weight: 700; flex: 1;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    #estado-header .vigencia-header { font-size: 11px; opacity: 0.7; white-space: nowrap; flex-shrink: 0; }
+    #map { top: 40px !important; }
+    #panel-busqueda { top: 56px !important; }
+    #tabla-precios-wrapper { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+    #btn-ver-tabla {
+      position: fixed; bottom: 170px; left: 16px; z-index: 1000;
+      background: #1a3a5c; color: #fff; border: none; border-radius: 8px;
+      padding: 7px 14px; font-size: 12px; font-weight: 600;
+      cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    }
+    #btn-ver-tabla:hover { background: #0f2a45; }
+    #modal-tabla {
+      display: none; position: fixed; inset: 40px 0 160px 0; z-index: 1050;
+      background: rgba(255,255,255,0.98); overflow-y: auto; padding: 16px;
+    }
+    #modal-tabla.visible { display: block; }
+    #modal-tabla h2 { font-size: 16px; color: #1a3a5c; margin-bottom: 12px; }
+    #modal-tabla table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    #modal-tabla th { background: #1a3a5c; color: #fff; padding: 8px 10px; text-align: left; font-size: 12px; }
+    #modal-tabla td { padding: 7px 10px; border-bottom: 1px solid #eee; color: #333; }
+    #modal-tabla tr:nth-child(even) td { background: #f8f9fb; }
+    #modal-tabla .precio-lt { font-weight: 700; }
+    #btn-cerrar-tabla {
+      display: block; margin: 0 0 14px auto; background: #e8e8e8;
+      border: none; border-radius: 6px; padding: 6px 14px; cursor: pointer; font-size: 12px;
+    }
+    #btn-cerrar-tabla:hover { background: #d0d0d0; }
+    @media (max-width: 480px) { #btn-ver-tabla { bottom: 130px; } }
+  </style>
+</head>
+<body>
+
+  <div id="estado-header">
+    <a href="/" title="Ver todo México">← México</a>
+    <h1>Gas LP · Querétaro</h1>
+    <span class="vigencia-header" id="vigencia-header"></span>
+  </div>
+
+  <!-- Tabla SEO indexable (off-screen) -->
+  <div id="tabla-precios-wrapper">
+    <h2>Precio del Gas LP en Querétaro por Municipio</h2>
+    <p>Precios máximos oficiales con IVA incluido, vigentes para la semana actual según la Comisión Nacional de Energía (CNE).</p>
+    <table>
+      <thead><tr><th>Municipio</th><th>Precio por Kilogramo</th><th>Precio por Litro</th></tr></thead>
+      <tbody id="tbody-seo"></tbody>
+    </table>
+    <p>Fuente: Comisión Nacional de Energía (CNE). Precios actualizados cada semana.</p>
+  </div>
+
+  <div id="map"></div>
+
+  <!-- Banner Gasometric -->
+  <div id="banner-gasometric">
+    <a href="https://gasometric.com" target="_blank" rel="noopener" id="banner-link">
+      <picture>
+        <source srcset="banner-gasometric.webp" type="image/webp">
+        <img src="banner-gasometric.jpg" alt="Gasometric: medidor inteligente de consumo de gas LP" id="banner-img" />
+      </picture>
+    </a>
+    <button id="banner-close" title="Cerrar" aria-label="Cerrar banner">✕</button>
+  </div>
+
+  <!-- Panel de búsqueda -->
+  <div id="panel-busqueda">
+    <div id="panel-header">
+      <div style="font-size:15px;font-weight:700;letter-spacing:0.3px;">Querétaro — Gas LP</div>
+      <p id="vigencia-label"></p>
+    </div>
+    <div id="search-wrap">
+      <input type="text" id="input-busqueda" placeholder="Buscar municipio..." autocomplete="off" />
+      <button id="btn-limpiar" title="Limpiar" aria-label="Limpiar búsqueda">✕</button>
+    </div>
+    <ul id="lista-resultados" hidden></ul>
+    <div id="info-resultado" hidden>
+      <div class="info-nombre"></div>
+      <div class="info-estado"></div>
+      <div class="info-precios">
+        <div class="precio-item">
+          <span class="precio-label">Por kilogramo</span>
+          <span class="precio-val kg-val"></span>
+        </div>
+        <div class="precio-item">
+          <span class="precio-label">Por litro</span>
+          <span class="precio-val lt-val"></span>
+        </div>
+      </div>
+      <div class="info-nota">Precio máximo con IVA incluido</div>
+    </div>
+    <div id="panel-footer">
+      <a id="link-fuente" href="#" target="_blank" rel="noopener">Fuente: CNE</a>
+      <span id="vigencia-pie"></span>
+    </div>
+    <div id="promo-gasometric">
+      <div class="promo-texto">
+        <span class="promo-logo">⚡</span>
+        <span>Mide tu consumo con <strong>Gasometric</strong></span>
+      </div>
+      <a href="https://gasometric.com" target="_blank" rel="noopener" class="promo-link">Saber más</a>
+    </div>
+  </div>
+
+  <button id="btn-ver-tabla">📋 Ver lista completa</button>
+
+  <div id="modal-tabla" role="dialog" aria-modal="true" aria-label="Precios gas LP Querétaro">
+    <button id="btn-cerrar-tabla">✕ Cerrar</button>
+    <h2>Gas LP en Querétaro — <span id="modal-vigencia"></span></h2>
+    <table>
+      <thead><tr><th>Municipio</th><th>$/kg (con IVA)</th><th>$/litro (con IVA)</th></tr></thead>
+      <tbody id="tbody-modal"></tbody>
+    </table>
+    <p style="font-size:11px;color:#999;margin-top:12px;">Fuente: <a id="link-fuente-modal" href="#" target="_blank" rel="noopener">Comisión Nacional de Energía (CNE)</a></p>
+  </div>
+
+  <div id="leyenda">
+    <div class="leyenda-titulo">$/litro con IVA</div>
+    <div class="leyenda-item"><span class="dot" style="background:#1a9641"></span>&lt; $9.50</div>
+    <div class="leyenda-item"><span class="dot" style="background:#74c476"></span>$9.50 – $10.00</div>
+    <div class="leyenda-item"><span class="dot" style="background:#a6d96a"></span>$10.00 – $10.50</div>
+    <div class="leyenda-item"><span class="dot" style="background:#fee08b"></span>$10.50 – $11.00</div>
+    <div class="leyenda-item"><span class="dot" style="background:#fc8d59"></span>$11.00 – $11.50</div>
+    <div class="leyenda-item"><span class="dot" style="background:#d7191c"></span>&gt; $11.50</div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+  <script src="precios.js"></script>
+
+  <script>
+    // ── Config de estado ──────────────────────────────────────────────────────
+    const ESTADO_ALIAS = ["Querétaro"];
+
+    // ── Datos filtrados para tabla SEO ────────────────────────────────────────
+    const listaEstado = DATOS_PRECIOS.lista.filter(e =>
+      ESTADO_ALIAS.some(a => e.e === a)
+    );
+
+    // ── Vigencia ──────────────────────────────────────────────────────────────
+    document.getElementById('vigencia-label').textContent  = 'Vigencia: ' + DATOS_PRECIOS.vigencia;
+    document.getElementById('vigencia-pie').textContent    = DATOS_PRECIOS.vigencia;
+    document.getElementById('vigencia-header').textContent = DATOS_PRECIOS.vigencia;
+    document.getElementById('modal-vigencia').textContent  = DATOS_PRECIOS.vigencia;
+    document.getElementById('link-fuente').href            = DATOS_PRECIOS.url_fuente;
+    document.getElementById('link-fuente-modal').href      = DATOS_PRECIOS.url_fuente;
+
+    // ── Mapa (todo México, centrado en el estado) ─────────────────────────────
+    const map = L.map('map', { center: [20.6, -100], zoom: 9, zoomControl: true });
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/">CARTO</a>',
+      subdomains: 'abcd', maxZoom: 19
+    }).addTo(map);
+
+    function colorPorPrecio(lt) {
+      if (lt < 9.50)  return '#1a9641';
+      if (lt < 10.00) return '#74c476';
+      if (lt < 10.50) return '#a6d96a';
+      if (lt < 11.00) return '#fee08b';
+      if (lt < 11.50) return '#fc8d59';
+      return '#d7191c';
+    }
+
+    const cluster = L.markerClusterGroup({
+      maxClusterRadius: 40, disableClusteringAtZoom: 8,
+      iconCreateFunction: function(c) {
+        const ms = c.getAllChildMarkers();
+        const avg = ms.reduce((s,m) => s + m.options.lt, 0) / ms.length;
+        return L.divIcon({ html: '<div class="cluster-pin" style="background:' + colorPorPrecio(avg) + '">' + c.getChildCount() + '</div>', className: '', iconSize:[36,36], iconAnchor:[18,18] });
+      }
+    });
+
+    DATOS_PRECIOS.marcadores.forEach(m => {
+      const marker = L.marker([m.lat, m.lng], {
+        icon: L.divIcon({ className:'', html: '<div class="marcador-pin" style="background:' + colorPorPrecio(m.lt) + '">$' + m.lt.toFixed(2) + '</div>', iconSize:[54,24], iconAnchor:[27,12], popupAnchor:[0,-14] }),
+        lt: m.lt
+      });
+      marker.bindPopup('<div class="popup-content"><div class="popup-nombre">' + m.nombre + '</div><div class="popup-estado">' + m.estado + '</div><div class="popup-precios"><div><span class="plabel">Por litro</span><span class="pval">$' + m.lt.toFixed(2) + '</span></div><div><span class="plabel">Por kg</span><span class="pval">$' + m.kg.toFixed(2) + '</span></div></div><div class="popup-nota">Precio máximo con IVA</div></div>', {maxWidth:200});
+      cluster.addLayer(marker);
+    });
+    map.addLayer(cluster);
+
+    // ── Tabla SEO y modal ─────────────────────────────────────────────────────
+    const filas = listaEstado.map(e =>
+      '<tr><td>' + e.m + '</td><td>$' + e.kg.toFixed(2) + '</td><td class="precio-lt">$' + e.lt.toFixed(2) + '</td></tr>'
+    ).join('');
+    document.getElementById('tbody-seo').innerHTML   = filas;
+    document.getElementById('tbody-modal').innerHTML = filas;
+
+    // ── Búsqueda (estado primero, luego todo el país) ─────────────────────────
+    const inputB = document.getElementById('input-busqueda');
+    const listaR = document.getElementById('lista-resultados');
+    const infoR  = document.getElementById('info-resultado');
+    const normalizar = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+    let tout;
+
+    inputB.addEventListener('input', () => {
+      clearTimeout(tout);
+      const q = inputB.value.trim();
+      if (q.length < 2) { listaR.hidden = true; infoR.hidden = true; return; }
+      tout = setTimeout(() => {
+        const qn = normalizar(q);
+        const delEstado = DATOS_PRECIOS.lista.filter(e =>
+          ESTADO_ALIAS.some(a => e.e === a) && (normalizar(e.m).includes(qn) || normalizar(e.e).includes(qn))
+        );
+        const otros = DATOS_PRECIOS.lista.filter(e =>
+          !ESTADO_ALIAS.some(a => e.e === a) && (normalizar(e.m).includes(qn) || normalizar(e.e).includes(qn))
+        );
+        const res = [...delEstado, ...otros].slice(0, 8);
+        listaR.innerHTML = '';
+        if (res.length === 0) {
+          const li = document.createElement('li'); li.className = 'sin-resultados'; li.textContent = 'Sin resultados'; listaR.appendChild(li);
+        } else {
+          res.forEach(e => {
+            const li = document.createElement('li');
+            li.innerHTML = '<span class="res-municipio">' + e.m + '</span><span class="res-estado">' + e.e + '</span>';
+            li.addEventListener('click', () => {
+              listaR.hidden = true; infoR.hidden = false;
+              infoR.querySelector('.info-nombre').textContent = e.m;
+              infoR.querySelector('.info-estado').textContent = e.e;
+              infoR.querySelector('.kg-val').textContent = '$' + e.kg.toFixed(2) + '/kg';
+              infoR.querySelector('.lt-val').textContent = '$' + e.lt.toFixed(2) + '/L';
+              infoR.querySelector('.lt-val').style.color = colorPorPrecio(e.lt);
+              const mc = DATOS_PRECIOS.marcadores.find(m => m.estado === e.e && Math.abs(m.lt - e.lt) < 0.01);
+              if (mc) map.setView([mc.lat, mc.lng], 10, {animate:true});
+            });
+            listaR.appendChild(li);
+          });
+        }
+        listaR.hidden = false; infoR.hidden = true;
+      }, 180);
+    });
+
+    document.getElementById('btn-limpiar').addEventListener('click', () => {
+      inputB.value = ''; listaR.hidden = true; infoR.hidden = true;
+    });
+    document.addEventListener('click', e => { if (!e.target.closest('#panel-busqueda')) listaR.hidden = true; });
+
+    // ── Modal y Banner ────────────────────────────────────────────────────────
+    document.getElementById('btn-ver-tabla').addEventListener('click', () => document.getElementById('modal-tabla').classList.add('visible'));
+    document.getElementById('btn-cerrar-tabla').addEventListener('click', () => document.getElementById('modal-tabla').classList.remove('visible'));
+    document.getElementById('banner-close').addEventListener('click', () => document.getElementById('banner-gasometric').style.display = 'none');
+  </script>
+</body>
+</html>

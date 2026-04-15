@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ── SEO Primary ─────────────────────────────────────────────────── -->
+  <title>Precio del Gas LP en México 2026 | Por Estado y Municipio</title>
+  <meta name="description" content="Consulta el precio del gas LP en tu municipio o estado. Precios máximos oficiales de la semana actualizados, fácil de buscar en el mapa. Fuente: CNE.">
+  <meta name="keywords" content="precio del gas LP México, precio gas LP por estado, precio gas LP 2026, cuánto cuesta el gas, precio gas LP CDMX, precio gas LP hoy, gas LP precio por kilo, precio gas butano México">
+  <link rel="canonical" href="https://preciodelgas.com/">
+
+  <!-- ── Open Graph / Social ─────────────────────────────────────────── -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://preciodelgas.com/">
+  <meta property="og:title" content="Precio del Gas LP en México 2026 — Busca tu Estado">
+  <meta property="og:description" content="Mapa interactivo con los precios máximos oficiales del gas LP por municipio en toda la República Mexicana. Actualizado cada semana.">
+  <meta property="og:locale" content="es_MX">
+  <meta property="og:image" content="https://preciodelgas.com/banner-gasometric.webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Mapa interactivo de precios de gas LP en México">
+
+  <!-- ── Twitter Card ────────────────────────────────────────────────── -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Precio del Gas LP en México 2026">
+  <meta name="twitter:description" content="Encuentra el precio del gas LP en tu municipio en segundos. Mapa con precios oficiales de la CNE.">
+  <meta name="twitter:image" content="https://preciodelgas.com/banner-gasometric.webp">
+
+  <!-- ── Structured Data (JSON-LD) ──────────────────────────────────── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Precio del Gas LP en México",
+    "url": "https://preciodelgas.com/",
+    "description": "Consulta los precios máximos del gas LP por municipio y estado en México, con datos oficiales actualizados semanalmente por la Comisión Nacional de Energía.",
+    "inLanguage": "es-MX",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://preciodelgas.com/?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+
+  <!-- ── FAQ Schema (JSON-LD) ──────────────────────────────────────────── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "¿Cuánto cuesta el gas LP en México esta semana?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "El precio del gas LP en México varía entre $16 y $22 pesos por kilogramo según la región. En la Ciudad de México y Estado de México el precio ronda los $19.25/kg ($10.40/litro). Puedes consultar el precio exacto de tu municipio en el mapa interactivo de esta página."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Cada cuándo cambia el precio del gas LP?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "El precio del gas LP en México se actualiza semanalmente. La Comisión Nacional de Energía (CNE) publica cada semana los precios máximos oficiales por municipio y modalidad de venta (cilindro, tanque estacionario, autoconsumo)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Cómo se fija el precio máximo del gas LP en México?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "La Comisión Nacional de Energía (CNE) calcula semanalmente los precios máximos de venta del gas LP con base en el precio de referencia internacional, el tipo de cambio, costos logísticos y el margen de distribución. Los distribuidores no pueden cobrar por encima de ese precio máximo."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Qué hago si el gasero me cobra más del precio oficial?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Si un distribuidor cobra más del precio máximo oficial, puedes reportarlo a la Procuraduría Federal del Consumidor (PROFECO) a través de su línea 800-468-8722 (INFOTEL) o en su sitio web. El precio máximo oficial de tu municipio lo puedes consultar en esta página."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿El precio es por kilo o por litro?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "El gas LP se vende tanto por kilogramo (para cilindros portátiles) como por litro (para tanques estacionarios). En esta página encontrarás ambos precios para cada municipio. La relación aproximada es: 1 kg ≈ 1.854 litros de gas LP."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Cuánto cuesta llenar un tanque de 30 kg de gas?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "El costo de llenar un tanque de 30 kg depende de tu municipio. Multiplica el precio por kilo de tu zona por 30. Por ejemplo, en la CDMX con un precio de $19.25/kg, un tanque de 30 kg costaría aproximadamente $577.50 pesos."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Leaflet MarkerCluster CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Contenido para SEO (oculto visualmente con CSS, indexable por Google) -->
+  <div id="seo-content">
+    <h1>Precio del Gas LP en México 2026 por Estado y Municipio</h1>
+    <p>Consulta el precio máximo oficial del gas LP (gas butano / gas doméstico) en tu municipio esta semana. Los precios son establecidos por la Comisión Nacional de Energía (CNE) y se actualizan cada semana. Encuentra tu estado: CDMX, Estado de México, Jalisco, Nuevo León, Puebla, Veracruz, Guanajuato, Chihuahua y más.</p>
+  </div>
+
+  <div id="map"></div>
+
+  <!-- Banner Gasometric -->
+  <div id="banner-gasometric">
+    <a href="https://gasometric.com" target="_blank" rel="noopener" id="banner-link">
+      <picture>
+        <source srcset="banner-gasometric.webp" type="image/webp">
+        <img src="banner-gasometric.jpg" alt="¿Quieres monitorear el consumo de gas en tu hogar? Conoce Gasometric" id="banner-img" />
+      </picture>
+    </a>
+    <button id="banner-close" title="Cerrar" aria-label="Cerrar banner">✕</button>
+  </div>
+
+  <!-- Panel de búsqueda -->
+  <div id="panel-busqueda">
+    <div id="panel-header">
+      <h2>Gas LP · Precios máximos</h2>
+      <p id="vigencia-label"></p>
+    </div>
+    <div id="search-wrap">
+      <input type="text" id="input-busqueda" placeholder="Buscar municipio o estado..." autocomplete="off" />
+      <button id="btn-limpiar" title="Limpiar" aria-label="Limpiar búsqueda">✕</button>
+    </div>
+    <ul id="lista-resultados" hidden></ul>
+    <div id="info-resultado" hidden>
+      <div class="info-nombre"></div>
+      <div class="info-estado"></div>
+      <div class="info-precios">
+        <div class="precio-item">
+          <span class="precio-label">Por kilogramo</span>
+          <span class="precio-val kg-val"></span>
+        </div>
+        <div class="precio-item">
+          <span class="precio-label">Por litro</span>
+          <span class="precio-val lt-val"></span>
+        </div>
+      </div>
+      <div class="info-nota">Precio máximo con IVA incluido</div>
+    </div>
+    <div id="panel-footer">
+      <a id="link-fuente" href="#" target="_blank" rel="noopener">Fuente: CNE</a>
+      <span id="vigencia-pie"></span>
+    </div>
+
+    <!-- Sección FAQ -->
+    <div id="faq-section">
+      <button id="faq-toggle" aria-expanded="false" aria-controls="faq-lista">
+        <span>Preguntas frecuentes</span>
+        <span id="faq-icon">▾</span>
+      </button>
+      <div id="faq-lista" hidden>
+        <div class="faq-item">
+          <p class="faq-q">¿Cada cuándo cambia el precio?</p>
+          <p class="faq-a">Semanalmente. La CNE publica precios máximos cada lunes.</p>
+        </div>
+        <div class="faq-item">
+          <p class="faq-q">¿El precio es por kilo o por litro?</p>
+          <p class="faq-a">Esta página muestra ambos. 1 kg ≈ 1.854 litros de gas LP.</p>
+        </div>
+        <div class="faq-item">
+          <p class="faq-q">¿Qué hago si me cobran más?</p>
+          <p class="faq-a">Repórtalo a PROFECO al 800-468-8722 o en profeco.gob.mx.</p>
+        </div>
+        <div class="faq-item">
+          <p class="faq-q">¿Cuánto cuesta un tanque de 30 kg?</p>
+          <p class="faq-a">Multiplica el precio/kg de tu municipio × 30. Ej: CDMX $19.25 × 30 = ~$577.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Promo Gasometric dentro del panel -->
+    <div id="promo-gasometric">
+      <div class="promo-texto">
+        <span class="promo-logo">⚡</span>
+        <span>Mide tu consumo con <strong>Gasometric</strong></span>
+      </div>
+      <a href="https://gasometric.com" target="_blank" rel="noopener" class="promo-link">Saber más</a>
+    </div>
+  </div>
+
+  <!-- Leyenda de colores -->
+  <div id="leyenda">
+    <div class="leyenda-titulo">$/litro con IVA</div>
+    <div class="leyenda-item"><span class="dot" style="background:#1a9641"></span>&lt; $9.50</div>
+    <div class="leyenda-item"><span class="dot" style="background:#74c476"></span>$9.50 – $10.00</div>
+    <div class="leyenda-item"><span class="dot" style="background:#a6d96a"></span>$10.00 – $10.50</div>
+    <div class="leyenda-item"><span class="dot" style="background:#fee08b"></span>$10.50 – $11.00</div>
+    <div class="leyenda-item"><span class="dot" style="background:#fc8d59"></span>$11.00 – $11.50</div>
+    <div class="leyenda-item"><span class="dot" style="background:#d7191c"></span>&gt; $11.50</div>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Leaflet MarkerCluster JS -->
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+
+  <!-- Datos de precios -->
+  <script src="precios.js"></script>
+
+  <script>
+    // ── Mapa ─────────────────────────────────────────────────────────────────
+    const map = L.map('map', {
+      center: [23.5, -102.5],
+      zoom: 5,
+      zoomControl: true
+    });
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 19
+    }).addTo(map);
+
+    // ── Color por precio ─────────────────────────────────────────────────────
+    function colorPorPrecio(lt) {
+      if (lt < 9.50)  return '#1a9641';
+      if (lt < 10.00) return '#74c476';
+      if (lt < 10.50) return '#a6d96a';
+      if (lt < 11.00) return '#fee08b';
+      if (lt < 11.50) return '#fc8d59';
+      return '#d7191c';
+    }
+
+    function crearIcono(lt) {
+      const color = colorPorPrecio(lt);
+      return L.divIcon({
+        className: '',
+        html: `<div class="marcador-pin" style="background:${color}">$${lt.toFixed(2)}</div>`,
+        iconSize: [54, 24],
+        iconAnchor: [27, 12],
+        popupAnchor: [0, -14]
+      });
+    }
+
+    // ── Carga de marcadores ───────────────────────────────────────────────────
+    const cluster = L.markerClusterGroup({
+      maxClusterRadius: 40,
+      disableClusteringAtZoom: 8,
+      iconCreateFunction: function(c) {
+        const markers = c.getAllChildMarkers();
+        const avg = markers.reduce((s, m) => s + m.options.lt, 0) / markers.length;
+        const color = colorPorPrecio(avg);
+        return L.divIcon({
+          html: `<div class="cluster-pin" style="background:${color}">${c.getChildCount()}</div>`,
+          className: '',
+          iconSize: [36, 36],
+          iconAnchor: [18, 18]
+        });
+      }
+    });
+
+    DATOS_PRECIOS.marcadores.forEach(m => {
+      const marker = L.marker([m.lat, m.lng], {
+        icon: crearIcono(m.lt),
+        lt: m.lt
+      });
+
+      marker.bindPopup(`
+        <div class="popup-content">
+          <div class="popup-nombre">${m.nombre}</div>
+          <div class="popup-estado">${m.estado}</div>
+          <div class="popup-precios">
+            <div><span class="plabel">Por litro</span><span class="pval">$${m.lt.toFixed(2)}</span></div>
+            <div><span class="plabel">Por kg</span><span class="pval">$${m.kg.toFixed(2)}</span></div>
+          </div>
+          <div class="popup-nota">Precio máximo con IVA</div>
+        </div>
+      `, { maxWidth: 200 });
+
+      cluster.addLayer(marker);
+    });
+
+    map.addLayer(cluster);
+
+    // ── Datos de vigencia ─────────────────────────────────────────────────────
+    document.getElementById('vigencia-label').textContent = `Vigencia: ${DATOS_PRECIOS.vigencia}`;
+    document.getElementById('vigencia-pie').textContent = DATOS_PRECIOS.vigencia;
+    document.getElementById('link-fuente').href = DATOS_PRECIOS.url_fuente;
+
+    // ── Búsqueda ─────────────────────────────────────────────────────────────
+    const inputBusqueda = document.getElementById('input-busqueda');
+    const listaResultados = document.getElementById('lista-resultados');
+    const infoResultado = document.getElementById('info-resultado');
+    const btnLimpiar = document.getElementById('btn-limpiar');
+
+    // Índice de búsqueda normalizado
+    const normalizar = str => str.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+
+    let timeoutBusqueda;
+    let markerDestacado = null;
+
+    inputBusqueda.addEventListener('input', () => {
+      clearTimeout(timeoutBusqueda);
+      const q = inputBusqueda.value.trim();
+
+      if (q.length < 2) {
+        listaResultados.hidden = true;
+        infoResultado.hidden = true;
+        return;
+      }
+
+      timeoutBusqueda = setTimeout(() => buscar(q), 180);
+    });
+
+    function buscar(q) {
+      const qn = normalizar(q);
+      const resultados = DATOS_PRECIOS.lista.filter(e =>
+        normalizar(e.m).includes(qn) || normalizar(e.e).includes(qn)
+      ).slice(0, 8);
+
+      listaResultados.innerHTML = '';
+
+      if (resultados.length === 0) {
+        const li = document.createElement('li');
+        li.className = 'sin-resultados';
+        li.textContent = 'Sin resultados';
+        listaResultados.appendChild(li);
+      } else {
+        resultados.forEach(e => {
+          const li = document.createElement('li');
+          li.innerHTML = `<span class="res-municipio">${e.m}</span><span class="res-estado">${e.e}</span>`;
+          li.dataset.lt = e.lt;
+          li.addEventListener('click', () => mostrarResultado(e));
+          listaResultados.appendChild(li);
+        });
+      }
+
+      listaResultados.hidden = false;
+      infoResultado.hidden = true;
+    }
+
+    function mostrarResultado(e) {
+      listaResultados.hidden = true;
+      infoResultado.hidden = false;
+
+      infoResultado.querySelector('.info-nombre').textContent = e.m;
+      infoResultado.querySelector('.info-estado').textContent = e.e;
+      infoResultado.querySelector('.kg-val').textContent = `$${e.kg.toFixed(2)}/kg`;
+      infoResultado.querySelector('.lt-val').textContent = `$${e.lt.toFixed(2)}/L`;
+      infoResultado.querySelector('.lt-val').style.color = colorPorPrecio(e.lt);
+
+      // Buscar marcador cercano en el mapa
+      const marcador = DATOS_PRECIOS.marcadores.find(m =>
+        m.estado === e.e && Math.abs(m.lt - e.lt) < 0.01
+      );
+      if (marcador) {
+        map.setView([marcador.lat, marcador.lng], 10, { animate: true });
+      }
+    }
+
+    btnLimpiar.addEventListener('click', () => {
+      inputBusqueda.value = '';
+      listaResultados.hidden = true;
+      infoResultado.hidden = true;
+    });
+
+    // Cerrar lista al hacer clic fuera
+    document.addEventListener('click', e => {
+      if (!e.target.closest('#panel-busqueda')) {
+        listaResultados.hidden = true;
+      }
+    });
+
+    // ── Banner Gasometric ─────────────────────────────────────────────
+    document.getElementById('banner-close').addEventListener('click', () => {
+      document.getElementById('banner-gasometric').style.display = 'none';
+    });
+
+    // ── FAQ Toggle ────────────────────────────────────────────────────
+    const faqToggle = document.getElementById('faq-toggle');
+    const faqLista  = document.getElementById('faq-lista');
+    const faqIcon   = document.getElementById('faq-icon');
+    faqToggle.addEventListener('click', () => {
+      const expanded = faqToggle.getAttribute('aria-expanded') === 'true';
+      faqToggle.setAttribute('aria-expanded', String(!expanded));
+      faqLista.hidden = expanded;
+      faqIcon.textContent = expanded ? '▾' : '▴';
+    });
+  </script>
+</body>
+</html>
